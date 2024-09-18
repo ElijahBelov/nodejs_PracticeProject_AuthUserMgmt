@@ -35,7 +35,7 @@ const authenticatedUser = (username, password) => {
 
 const app = express();
 
-app.use(session({secret:"fingerpint"},resave=true,saveUninitialized=true));
+app.use(session({secret: "fingerpint"}, resave = true, saveUninitialized = true));
 
 app.use(express.json());
 
@@ -51,11 +51,11 @@ app.use("/friends", function auth(req, res, next) {
                 req.user = user;
                 next(); // Proceed to the next middleware
             } else {
-                return res.status(403).json({ message: "User not authenticated" });
+                return res.status(403).json({message: "User not authenticated"});
             }
         });
     } else {
-        return res.status(403).json({ message: "User not logged in" });
+        return res.status(403).json({message: "User not logged in"});
     }
 });
 
@@ -66,7 +66,7 @@ app.post("/login", (req, res) => {
 
     // Check if username or password is missing
     if (!username || !password) {
-        return res.status(404).json({ message: "Error logging in" });
+        return res.status(404).json({message: "Error logging in"});
     }
 
     // Authenticate user
@@ -74,7 +74,7 @@ app.post("/login", (req, res) => {
         // Generate JWT access token
         let accessToken = jwt.sign({
             data: password
-        }, 'access', { expiresIn: 60 * 60 });
+        }, 'access', {expiresIn: 60 * 60});
 
         // Store access token and username in session
         req.session.authorization = {
@@ -82,12 +82,14 @@ app.post("/login", (req, res) => {
         }
         return res.status(200).send("User successfully logged in");
     } else {
-        return res.status(208).json({ message: "Invalid Login. Check username and password" });
+        return res.status(208).json({message: "Invalid Login. Check username and password"});
     }
 });
 
 // Register a new user
 app.post("/register", (req, res) => {
+    //console.log(req);
+
     const username = req.body.username;
     const password = req.body.password;
 
@@ -107,8 +109,8 @@ app.post("/register", (req, res) => {
 });
 
 
-const PORT =5000;
+const PORT = 5000;
 
 app.use("/friends", routes);
 
-app.listen(PORT,()=>console.log("Server is running"));
+app.listen(PORT, () => console.log("Server is running"));
